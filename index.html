@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>tænd.dk - skal jeg tænde for strømmen?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anuphan&display=swap');
+
+    body {
+      background-color: #ddd;
+      font-family: 'Anuphan', sans-serif;
+      font-size: 1.9em
+    }
+
+    .fade-in {
+      transition-property: opacity;
+      transition-duration: 2s;
+      opacity: 0
+    }
+
+    #content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      width: 50%
+    }
+
+    #icon {
+      font-size: 10em;
+      margin-bottom: .1em
+    }
+
+    #buttons {
+      margin-top: .5em
+    }
+
+    a.button-X {
+      font-size: 0.4em;
+      display: inline-block;
+      padding: 0.5em 3em;
+      border: 0.16em solid #FFFFFF;
+      margin: 0 0.3em 0.3em 0;
+      box-sizing: border-box;
+      text-decoration: none;
+      font-family: 'Anuphan', sans-serif;
+      color: #FFFFFF;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    a.button-X:hover {
+      color: #303030;
+      border-color: #303030;
+    }
+
+    a.button-X:active {
+      color: #303030;
+      border-color: #303030;
+    }
+
+    @media all and (max-width:30em) {
+      a.button-X {
+        display: block;
+        margin: 0.4em auto;
+      }
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <div id="content">
+    <div id="contentWrapper" class="fade-in">
+      <div><i id="icon"></i></div>
+      <div id="msg"></div>
+      <div id="buttons">
+        <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+        <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <script>
+
+      function isDOMReady() {
+        return document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll);
+      }
+
+      function updateContent() {
+
+        var powerRegion = localStorage.getItem('powerRegionV2');
+        const element = document.getElementById('contentWrapper');
+
+        var now = new Date();
+        var currentHour = now.getHours();
+        console.log(currentHour)
+
+        if (powerRegion !== null) {
+
+          fetch(powerRegion)
+            .then(response => response.json())
+            .then(data => {
+              document.body.style.transition = 'background-color 1s';
+              document.body.style.backgroundColor = data[currentHour]['background-color'];
+              if (data[currentHour]['icon'] === 'on') {
+                document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-bounce';
+              } else {
+                document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-shake';
+              }
+              document.getElementById('msg').innerHTML = data[currentHour]['msg'];
+              element.style.opacity = '1';
+            })
+            .catch(error => {
+              console.log('Error fetching JSON data, using error object');
+              document.body.style.transition = 'background-color 1s';
+              document.body.style.backgroundColor = "#ddd";
+              document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-spin-pulse';
+              document.getElementById('msg').innerHTML = "Fejl. Prøv igen senere.";
+              element.style.opacity = '1';
+            });
+
+        } else {
+          document.getElementById('icon').className = 'fa-solid fa-compass fa-spin fa-spin-reverse';
+          document.getElementById('msg').innerHTML = "Vælg landsdel";
+          element.style.opacity = '1';
+        }
+
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+
+        updateContent();
+        // setInterval(updateContent, 300000);
+        setInterval(updateContent, 2000);
+
+        const regionWestButton = document.getElementById("region-west");
+        const regionEastButton = document.getElementById("region-east");
+
+        regionWestButton.addEventListener("click", function () {
+          region = "dataWest.json";
+          localStorage.setItem('powerRegionV2', region);
+          updateContent();
+        });
+
+        regionEastButton.addEventListener("click", function () {
+          region = "dataEast.json";
+          localStorage.setItem('powerRegionV2', region);
+          updateContent();
+        });
+
+      });
+
+
+    </script>
+
+</body>
+
+</html>
