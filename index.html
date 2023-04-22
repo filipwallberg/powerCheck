@@ -10,13 +10,26 @@
     body {
       background-color: #ddd;
       font-family: 'Anuphan', sans-serif;
-      font-size: 1.9em
+      font-size: 2.5rem;
+      margin: 0;
+      padding: 0;
     }
 
     .fade-in {
       transition-property: opacity;
-      transition-duration: 2s;
-      opacity: 0
+      transition-duration: 1s;
+      opacity: 0;
+      display: none;
+    }
+
+    #firstScreen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      width: 100%;
     }
 
     #content {
@@ -26,12 +39,27 @@
       transform: translate(-50%, -50%);
       text-align: center;
       color: #fff;
-      width: 50%
+      width: 100%;
     }
 
-    #icon {
-      font-size: 10em;
-      margin-bottom: .1em
+    #graph {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      width: 100%;
+    }
+
+    .icon {
+      font-size: 30rem;
+      margin-bottom: 5rem
+    }
+
+    #msg {
+      white-space: nowrap;
+      margin-bottom: 5rem
     }
 
     #buttons {
@@ -39,7 +67,7 @@
     }
 
     a.button-X {
-      font-size: 0.4em;
+      font-size: 1.8rem;
       display: inline-block;
       padding: 0.5em 3em;
       border: 0.16em solid #FFFFFF;
@@ -68,94 +96,206 @@
         margin: 0.4em auto;
       }
     }
+
+    #graph {
+      transition: opacity 1s ease-in-out;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      width: 80%;
+      background-color: #fff;
+      padding: 20px;
+    }
   </style>
   <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
 
 </head>
 
 <body>
-  <div id="content">
-    <div id="contentWrapper" class="fade-in">
-      <div><i id="icon"></i></div>
-      <div id="msg"></div>
-      <div id="buttons">
-        <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-        <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
-      </div>
+
+  <div id="firstScreen" class="fade-in">
+    <div><i id="iconFirstScreen" class="icon fa-solid fa-compass fa-spin fa-spin-reverse"></i></div>
+    <div id="msgFirstScreen">Vælg landsdel</div>
+    <div id="buttons">
+      <a id="region-west-front" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a id="region-east-front" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
     </div>
+    <div id="buttons">
+      <a id="open-graph-front" class="button-X"><i class="fa-solid fa-chart-simple"></i> Se data</a>
+    </div>
+  </div>
 
-    <script>
+  <div id="content" class="fade-in">
+    <div><i id="iconContent"></i></div>
+    <div id="msgContent"></div>
+    <div id="buttons">
+      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div id="buttons">
+      <a id="open-graph" class="button-X"><i class="fa-solid fa-chart-simple"></i> Se data</a>
+    </div>
+  </div>
 
-      function isDOMReady() {
-        return document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll);
-      }
+  <div id="graph" class="fade-in">
+    <iframe title="[ Insert title here ]" aria-label="Interactive line chart" id="datawrapper-chart-7G8Rg"
+      src="https://datawrapper.dwcdn.net/7G8Rg/2/" scrolling="no" frameborder="0"
+      style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe>
+    <script
+      type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r = 0; r < e.length; r++)if (e[r].contentWindow === a.source) { var i = a.data["datawrapper-height"][t] + "px"; e[r].style.height = i } } })) }();</script>
+  </div>
 
-      function updateContent() {
+  <script>
 
-        var powerRegion = localStorage.getItem('powerRegionV2');
-        const element = document.getElementById('contentWrapper');
+    const elementFirstScreen = document.getElementById('firstScreen');
+    const elementContent = document.getElementById('content');
+    const elementGraph = document.getElementById('graph');
 
-        var now = new Date();
-        var currentHour = now.getHours();
-        console.log(currentHour)
+    const regionWestButton = document.getElementById("region-west");
+    const regionEastButton = document.getElementById("region-east");
+    const openGraph = document.getElementById("open-graph");
 
-        if (powerRegion !== null) {
+    const regionWestButtonFront = document.getElementById("region-west-front");
+    const regionEastButtonFront = document.getElementById("region-east-front");
+    const openGraphFront = document.getElementById("open-graph-front");
 
-          fetch(powerRegion)
-            .then(response => response.json())
-            .then(data => {
-              document.body.style.transition = 'background-color 1s';
-              document.body.style.backgroundColor = data[currentHour]['background-color'];
-              if (data[currentHour]['icon'] === 'on') {
-                document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-bounce';
-              } else {
-                document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-shake';
-              }
-              document.getElementById('msg').innerHTML = data[currentHour]['msg'];
-              element.style.opacity = '1';
-            })
-            .catch(error => {
-              console.log('Error fetching JSON data, using error object');
-              document.body.style.transition = 'background-color 1s';
-              document.body.style.backgroundColor = "#ddd";
-              document.getElementById('icon').className = 'fa-sharp fa-solid fa-power-off fa-spin-pulse';
-              document.getElementById('msg').innerHTML = "Fejl. Prøv igen senere.";
-              element.style.opacity = '1';
-            });
+    function updateContent() {
 
-        } else {
-          document.getElementById('icon').className = 'fa-solid fa-compass fa-spin fa-spin-reverse';
-          document.getElementById('msg').innerHTML = "Vælg landsdel";
-          element.style.opacity = '1';
+      var powerRegion = localStorage.getItem('powerRegionV2');
+
+      var now = new Date();
+      var currentHour = now.getHours();
+
+      if (powerRegion == null) {
+
+        elementFirstScreen.style.display = 'block';
+        elementFirstScreen.style.opacity = '1';
+
+        elementFirstScreen.style.zIndex = 100;
+        elementContent.style.zIndex = 0;
+        elementGraph.style.zIndex = 0;
+
+      } else {
+
+        elementFirstScreen.style.zIndex = 0;
+        elementContent.style.zIndex = 100;
+        elementGraph.style.zIndex = 0;
+
+        if (elementFirstScreen.style.opacity === '1') {
+          elementFirstScreen.style.opacity = '0';
+          elementFirstScreen.style.display = 'none';
+          elementContent.style.display = 'none';
+          elementGraph.style.display = 'none';
         }
 
+        if (elementContent.style.opacity === '1') {
+          elementContent.style.opacity = '0';
+          elementFirstScreen.style.display = 'none';
+          elementContent.style.display = 'none';
+          elementGraph.style.display = 'none';
+        }
+
+        if (elementGraph.style.opacity === '1') {
+          elementGraph.style.opacity = '0';
+          elementGraph.style.display = 'none';
+          elementGraph.style.display = 'none';
+          elementGraph.style.display = 'none';
+        }
+
+        fetch(powerRegion)
+          .then(response => response.json())
+          .then(data => {
+            document.body.style.transition = 'background-color 1s';
+            document.body.style.backgroundColor = data[currentHour]['background-color'];
+            if (data[currentHour]['icon'] === 'on') {
+              document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
+            } else {
+              document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
+            }
+            document.getElementById('msgContent').innerHTML = data[currentHour]['msg'];
+          })
+          .catch(error => {
+            document.body.style.transition = 'background-color 1s';
+            document.body.style.backgroundColor = "#ddd";
+            document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-spin-pulse';
+            document.getElementById('msgContent').innerHTML = "Fejl. Prøv igen senere.";
+          });
+
+        elementFirstScreen.style.display = 'none';
+        elementGraph.style.display = 'none';
+        elementContent.style.opacity = '1';
+        elementContent.style.display = 'block';
+
+        elementFirstScreen.style.zIndex = 0;
+        elementContent.style.zIndex = 100;
+        elementGraph.style.zIndex = 0;
+
       }
 
-      document.addEventListener('DOMContentLoaded', function () {
+    }
 
+    document.addEventListener('DOMContentLoaded', function () {
+
+      updateContent();
+      setInterval(updateContent, 300000);
+
+      regionWestButtonFront.addEventListener("click", function () {
+        console.log("regionWestButton");
+        region = "dataWest.json";
+        localStorage.setItem('powerRegionV2', region);
         updateContent();
-        // setInterval(updateContent, 300000);
-        setInterval(updateContent, 2000);
-
-        const regionWestButton = document.getElementById("region-west");
-        const regionEastButton = document.getElementById("region-east");
-
-        regionWestButton.addEventListener("click", function () {
-          region = "dataWest.json";
-          localStorage.setItem('powerRegionV2', region);
-          updateContent();
-        });
-
-        regionEastButton.addEventListener("click", function () {
-          region = "dataEast.json";
-          localStorage.setItem('powerRegionV2', region);
-          updateContent();
-        });
-
       });
 
+      regionEastButtonFront.addEventListener("click", function () {
+        console.log("regionEastButton");
+        region = "dataEast.json";
+        localStorage.setItem('powerRegionV2', region);
+        updateContent();
+      });
 
-    </script>
+      openGraphFront.addEventListener("click", function () {
+        console.log("openGraph");
+
+        elementFirstScreen.style.zIndex = 0;
+        elementContent.style.zIndex = 0;
+        elementGraph.style.zIndex = 100;
+
+        elementContent.style.opacity = '0';
+        elementGraph.style.opacity = '1';
+      });
+
+      regionWestButton.addEventListener("click", function () {
+        console.log("regionWestButton");
+        region = "dataWest.json";
+        localStorage.setItem('powerRegionV2', region);
+        updateContent();
+      });
+
+      regionEastButton.addEventListener("click", function () {
+        console.log("regionEastButton");
+        region = "dataEast.json";
+        localStorage.setItem('powerRegionV2', region);
+        updateContent();
+      });
+
+      openGraph.addEventListener("click", function () {
+        console.log("openGraph");
+
+        elementFirstScreen.style.zIndex = 0;
+        elementContent.style.zIndex = 0;
+        elementGraph.style.zIndex = 100;
+
+        elementContent.style.opacity = '0';
+        elementGraph.style.opacity = '1';
+      });
+
+    });
+
+
+  </script>
 
 </body>
 
