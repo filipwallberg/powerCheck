@@ -14,14 +14,6 @@ function changeVisibility(elementsToShow, elementsToHide) {
 
 }
 
-const elementWelcomeScreen = document.getElementById('welcomeScreen');
-const elementContent = document.getElementById('content');
-
-const iconForContent = document.getElementById('content').querySelector('#icon');
-const msgForContent = document.getElementById('content').querySelector('#msg');
-
-const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
-
 function updateContent() {
 
      var powerRegion = localStorage.getItem('powerRegionV2');
@@ -32,7 +24,7 @@ function updateContent() {
      if (powerRegion == null) {
 
           changeVisibility([], [elementWelcomeScreen, elementContent]);
-          changeVisibility([elementWelcomeScreen], [elementWelcomeScreen, elementContent]);
+          changeVisibility([elementWelcomeScreen], [elementContent]);
 
      } else {
 
@@ -56,7 +48,6 @@ function updateContent() {
                     var myList = [];
 
                     for (var timestamp of timestamps) {
-                         console.log(timestamp);
                          var date = new Date(timestamp);
                          var now = new Date();
                          var diffInMs = date - now;
@@ -96,6 +87,14 @@ function updateContent() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+
+     const elementWelcomeScreen = document.getElementById('welcomeScreen');
+     const elementContent = document.getElementById('content');
+
+     const iconForContent = document.getElementById('content').querySelector('#icon');
+     const msgForContent = document.getElementById('content').querySelector('#msg');
+
+     const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
 
      updateContent();
      setInterval(updateContent, 300000);
