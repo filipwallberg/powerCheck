@@ -1,17 +1,49 @@
 function changeVisibility(elementsToShow, elementsToHide) {
 
      for (let i = 0; i < elementsToHide.length; i++) {
-          $(elementsToHide[i]).fadeOut();
+          $(elementsToHide[i]).fadeOut("fast");
           elementsToHide[i].style.zIndex = -1;
           elementsToHide[i].style.display = 'none';
      }
 
      for (let i = 0; i < elementsToShow.length; i++) {
-          $(elementsToShow[i]).fadeIn();
+          $(elementsToShow[i]).fadeIn("slow");
           elementsToShow[i].style.zIndex = 100;
           elementsToShow[i].style.display = 'block';
      }
 
+}
+
+function activateButtons() {
+     const regionButtons1 = document.querySelector('.region-buttons-1');
+
+     regionButtons1.addEventListener('click', (event) => {
+          if (event.target.dataset.region === undefined) {
+               var region = "dataEast";
+
+          } else {
+               var region = event.target.dataset.region;
+          }
+          var region = event.target.dataset.region;
+          const localStorageKey = 'powerRegionV2';
+          localStorage.setItem(localStorageKey, region + '.json');
+          updateContent(localStorage.getItem('powerRegionV2'));
+     });
+
+     const regionButtons2 = document.querySelector('.region-buttons-2');
+
+     regionButtons2.addEventListener('click', (event) => {
+          if (event.target.dataset.region === undefined) {
+               var region = "dataEast";
+
+          } else {
+               var region = event.target.dataset.region;
+          }
+          const localStorageKey = 'powerRegionV2';
+          localStorage.setItem(localStorageKey, region + '.json');
+          updateContent(localStorage.getItem('powerRegionV2'));
+
+     });
 }
 
 function updateContent() {
@@ -71,7 +103,7 @@ function updateContent() {
                     }
 
                     if (!hasFutureTimestamp) {
-                         listString = "Det bliver ikke billigt lige med det samme";
+                         listString = "Strømmen bliver ikke billig de næste mange timer";
                          msgForContentClock.innerHTML = listString;
                     } else {
                          let listString = myList.join(', ');
@@ -96,20 +128,8 @@ function updateContent() {
 
 document.addEventListener('DOMContentLoaded', function () {
 
+     activateButtons();
      updateContent();
      setInterval(updateContent, 300000);
 
-     const regionButtons = document.querySelector('.region-buttons');
-     const updateContentFn = () => updateContent(localStorage.getItem('powerRegionV2'));
-
-     // Define a single event listener function for all region buttons
-     regionButtons.addEventListener('click', (event) => {
-          // Get the region data file name from the clicked button
-          const region = event.target.dataset.region;
-
-          // Update the localStorage and call the content update function
-          const localStorageKey = 'powerRegionV2';
-          localStorage.setItem(localStorageKey, region + '.json');
-          updateContentFn();
-     });
 });
