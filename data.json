@@ -1,0 +1,36 @@
+{
+     "dk1": [
+          {
+               "time": "X0:00",
+               "avgCost": 0.1,
+               "price": 0.15
+          },
+          {
+               "time": "01:00",
+               "avgCost": 0.15,
+               "price": 0.2
+          },
+          {
+               "time": "02:00",
+               "avgCost": 0.2,
+               "price": 0.25
+          }
+     ],
+     "dk2": [
+          {
+               "time": "X0:00",
+               "avgCost": 0.2,
+               "price": 0.25
+          },
+          {
+               "time": "01:00",
+               "avgCost": 0.25,
+               "price": 0.3
+          },
+          {
+               "time": "02:00",
+               "avgCost": 0.3,
+               "price": 0.35
+          }
+     ]
+}
