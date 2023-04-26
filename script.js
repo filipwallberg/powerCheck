@@ -16,6 +16,14 @@ function changeVisibility(elementsToShow, elementsToHide) {
 
 function updateContent() {
 
+     const elementWelcomeScreen = document.getElementById('welcomeScreen');
+     const elementContent = document.getElementById('content');
+
+     const iconForContent = document.getElementById('content').querySelector('#icon');
+     const msgForContent = document.getElementById('content').querySelector('#msg');
+
+     const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
+
      var powerRegion = localStorage.getItem('powerRegionV2');
 
      var now = new Date();
@@ -87,14 +95,6 @@ function updateContent() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-
-     const elementWelcomeScreen = document.getElementById('welcomeScreen');
-     const elementContent = document.getElementById('content');
-
-     const iconForContent = document.getElementById('content').querySelector('#icon');
-     const msgForContent = document.getElementById('content').querySelector('#msg');
-
-     const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
 
      updateContent();
      setInterval(updateContent, 300000);
