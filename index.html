@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>xxx.dk - skal jeg tænde for strømmen?</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Anuphan&display=swap');
+    @import "https://fonts.googleapis.com/css2?family=Anuphan&display=swap";
 
     body {
       background-color: #ddd;
@@ -13,91 +13,40 @@
       font-size: 2.5rem;
       margin: 0;
       padding: 0;
+      transition: background-color 1s ease-in-out
     }
 
     .fade-in {
       transition-property: opacity;
-      transition-duration: 1s;
+      transition-duration: 2s;
       opacity: 0;
-      display: none;
+      display: none
     }
 
-    #firstScreen {
+    #welcomeScreen {
+      display: none;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
       color: #fff;
-      width: 100%;
+      width: 100%
     }
 
     #content {
+      display: none;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
       color: #fff;
-      width: 100%;
+      width: 100%
     }
 
     #graph {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #fff;
-      width: 100%;
-    }
-
-    .icon {
-      font-size: 30rem;
-      margin-bottom: 5rem
-    }
-
-    #msg {
-      white-space: nowrap;
-      margin-bottom: 5rem
-    }
-
-    #buttons {
-      margin-top: .5em
-    }
-
-    a.button-X {
-      font-size: 1.8rem;
-      display: inline-block;
-      padding: 0.5em 3em;
-      border: 0.16em solid #FFFFFF;
-      margin: 0 0.3em 0.3em 0;
-      box-sizing: border-box;
-      text-decoration: none;
-      font-family: 'Anuphan', sans-serif;
-      color: #FFFFFF;
-      text-align: center;
-      transition: all 0.15s;
-    }
-
-    a.button-X:hover {
-      color: #303030;
-      border-color: #303030;
-    }
-
-    a.button-X:active {
-      color: #303030;
-      border-color: #303030;
-    }
-
-    @media all and (max-width:30em) {
-      a.button-X {
-        display: block;
-        margin: 0.4em auto;
-      }
-    }
-
-    #graph {
+      display: none;
       transition: opacity 1s ease-in-out;
       position: absolute;
       top: 50%;
@@ -107,60 +56,118 @@
       color: #fff;
       width: 80%;
       background-color: #fff;
-      padding: 20px;
+      padding: 20px
+    }
+
+    .icon {
+      font-size: 30rem;
+      margin-bottom: 1.5rem
+    }
+
+    #msg {
+      white-space: nowrap;
+      margin-bottom: 1.5rem
+    }
+
+    #buttons {
+      margin-top: .5em
+    }
+
+    a.button-X {
+      font-size: 1.8rem;
+      display: inline-block;
+      padding: .5em 3em;
+      border: .16em solid #FFF;
+      margin: 0 .3em .3em 0;
+      box-sizing: border-box;
+      text-decoration: none;
+      font-family: 'Anuphan', sans-serif;
+      color: #FFF;
+      text-align: center;
+      transition: all .15s
+    }
+
+    a.button-X:hover {
+      color: #303030;
+      border-color: #303030
+    }
+
+    a.button-X:active {
+      color: #303030;
+      border-color: #303030
+    }
+
+    @media all and (max-width:30em) {
+      a.button-X {
+        display: block;
+        margin: .4em auto
+      }
     }
   </style>
   <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
 </head>
 
 <body>
 
-  <div id="firstScreen" class="fade-in">
-    <div><i id="iconFirstScreen" class="icon fa-solid fa-compass fa-spin fa-spin-reverse"></i></div>
-    <div id="msgFirstScreen">Vælg landsdel</div>
-    <div id="buttons">
-      <a id="region-west-front" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-      <a id="region-east-front" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-    <div id="buttons">
-      <a id="open-graph-front" class="button-X"><i class="fa-solid fa-chart-simple"></i> Se data</a>
-    </div>
-  </div>
-
-  <div id="content" class="fade-in">
-    <div><i id="iconContent"></i></div>
-    <div id="msgContent"></div>
-    <div id="buttons">
+  <div id="welcomeScreen">
+    <div><i id="icon" class="icon fa-solid fa-compass fa-spin fa-spin-reverse"></i></div>
+    <div id="msg">Vælg landsdel</div>
+    <div id="buttonsTop">
       <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
       <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
     </div>
-    <div id="buttons">
-      <a id="open-graph" class="button-X"><i class="fa-solid fa-chart-simple"></i> Se data</a>
+  </div>
+
+  <div id="content">
+    <div><i id="icon"></i></div>
+    <div id="msg"></div>
+    <div id="buttonsTop">
+      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 
-  <div id="graph" class="fade-in">
-    <iframe title="[ Insert title here ]" aria-label="Interactive line chart" id="datawrapper-chart-7G8Rg"
-      src="https://datawrapper.dwcdn.net/7G8Rg/2/" scrolling="no" frameborder="0"
-      style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe>
-    <script
-      type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r = 0; r < e.length; r++)if (e[r].contentWindow === a.source) { var i = a.data["datawrapper-height"][t] + "px"; e[r].style.height = i } } })) }();</script>
+  <div id="graph">
+    <div><i id="icon"></i></div>
+    <div id="msg"></div>
+    <div id="buttonsTop">
+      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+    </div>
   </div>
 
   <script>
 
-    const elementFirstScreen = document.getElementById('firstScreen');
+    function changeVisibility(elementsToShow, elementsToHide) {
+
+      for (let i = 0; i < elementsToHide.length; i++) {
+        $(elementsToHide[i]).fadeOut();
+        elementsToHide[i].style.zIndex = -1;
+        elementsToHide[i].style.display = 'none';
+      }
+
+      for (let i = 0; i < elementsToShow.length; i++) {
+        $(elementsToShow[i]).fadeIn();
+        elementsToShow[i].style.zIndex = 100;
+        elementsToShow[i].style.display = 'block';
+      }
+
+    }
+
+    const elementWelcomeScreen = document.getElementById('welcomeScreen');
     const elementContent = document.getElementById('content');
     const elementGraph = document.getElementById('graph');
 
-    const regionWestButton = document.getElementById("region-west");
-    const regionEastButton = document.getElementById("region-east");
-    const openGraph = document.getElementById("open-graph");
+    const regionWestButton = document.getElementById('welcomeScreen').querySelector('#region-west');
+    const regionWestButtonFront = document.getElementById('content').querySelector('#region-west');
 
-    const regionWestButtonFront = document.getElementById("region-west-front");
-    const regionEastButtonFront = document.getElementById("region-east-front");
-    const openGraphFront = document.getElementById("open-graph-front");
+    const regionEastButton = document.getElementById('welcomeScreen').querySelector('#region-east');
+    const regionEastButtonFront = document.getElementById('content').querySelector('#region-east');
+
+    const iconForContent = document.getElementById('content').querySelector('#icon');
+    const msgForContent = document.getElementById('content').querySelector('#msg');
 
     function updateContent() {
 
@@ -171,39 +178,12 @@
 
       if (powerRegion == null) {
 
-        elementFirstScreen.style.display = 'block';
-        elementFirstScreen.style.opacity = '1';
-
-        elementFirstScreen.style.zIndex = 100;
-        elementContent.style.zIndex = 0;
-        elementGraph.style.zIndex = 0;
+        changeVisibility([], [elementWelcomeScreen, elementGraph, elementContent]);
+        changeVisibility([elementWelcomeScreen], [elementWelcomeScreen, elementGraph, elementContent]);
 
       } else {
 
-        elementFirstScreen.style.zIndex = 0;
-        elementContent.style.zIndex = 100;
-        elementGraph.style.zIndex = 0;
-
-        if (elementFirstScreen.style.opacity === '1') {
-          elementFirstScreen.style.opacity = '0';
-          elementFirstScreen.style.display = 'none';
-          elementContent.style.display = 'none';
-          elementGraph.style.display = 'none';
-        }
-
-        if (elementContent.style.opacity === '1') {
-          elementContent.style.opacity = '0';
-          elementFirstScreen.style.display = 'none';
-          elementContent.style.display = 'none';
-          elementGraph.style.display = 'none';
-        }
-
-        if (elementGraph.style.opacity === '1') {
-          elementGraph.style.opacity = '0';
-          elementGraph.style.display = 'none';
-          elementGraph.style.display = 'none';
-          elementGraph.style.display = 'none';
-        }
+        changeVisibility([], [elementContent, elementGraph, elementWelcomeScreen]);
 
         fetch(powerRegion)
           .then(response => response.json())
@@ -211,27 +191,20 @@
             document.body.style.transition = 'background-color 1s';
             document.body.style.backgroundColor = data[currentHour]['background-color'];
             if (data[currentHour]['icon'] === 'on') {
-              document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
+              iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
             } else {
-              document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
+              iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
             }
-            document.getElementById('msgContent').innerHTML = data[currentHour]['msg'];
+            msgForContent.innerHTML = data[currentHour]['msg'];
           })
           .catch(error => {
             document.body.style.transition = 'background-color 1s';
             document.body.style.backgroundColor = "#ddd";
-            document.getElementById('iconContent').className = 'icon fa-sharp fa-solid fa-power-off fa-spin-pulse';
-            document.getElementById('msgContent').innerHTML = "Fejl. Prøv igen senere.";
+            iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-spin-pulse';
+            msgForContent.innerHTML = "Fejl. Prøv igen senere.";
           });
 
-        elementFirstScreen.style.display = 'none';
-        elementGraph.style.display = 'none';
-        elementContent.style.opacity = '1';
-        elementContent.style.display = 'block';
-
-        elementFirstScreen.style.zIndex = 0;
-        elementContent.style.zIndex = 100;
-        elementGraph.style.zIndex = 0;
+        changeVisibility([elementContent], [elementGraph, elementWelcomeScreen]);
 
       }
 
@@ -243,53 +216,23 @@
       setInterval(updateContent, 300000);
 
       regionWestButtonFront.addEventListener("click", function () {
-        console.log("regionWestButton");
-        region = "dataWest.json";
-        localStorage.setItem('powerRegionV2', region);
+        localStorage.setItem('powerRegionV2', "dataWest.json");
+        updateContent();
+      });
+
+      regionWestButton.addEventListener("click", function () {
+        localStorage.setItem('powerRegionV2', "dataWest.json");
         updateContent();
       });
 
       regionEastButtonFront.addEventListener("click", function () {
-        console.log("regionEastButton");
-        region = "dataEast.json";
-        localStorage.setItem('powerRegionV2', region);
-        updateContent();
-      });
-
-      openGraphFront.addEventListener("click", function () {
-        console.log("openGraph");
-
-        elementFirstScreen.style.zIndex = 0;
-        elementContent.style.zIndex = 0;
-        elementGraph.style.zIndex = 100;
-
-        elementContent.style.opacity = '0';
-        elementGraph.style.opacity = '1';
-      });
-
-      regionWestButton.addEventListener("click", function () {
-        console.log("regionWestButton");
-        region = "dataWest.json";
-        localStorage.setItem('powerRegionV2', region);
+        localStorage.setItem('powerRegionV2', "dataEast.json");
         updateContent();
       });
 
       regionEastButton.addEventListener("click", function () {
-        console.log("regionEastButton");
-        region = "dataEast.json";
-        localStorage.setItem('powerRegionV2', region);
+        localStorage.setItem('powerRegionV2', "dataEast.json");
         updateContent();
-      });
-
-      openGraph.addEventListener("click", function () {
-        console.log("openGraph");
-
-        elementFirstScreen.style.zIndex = 0;
-        elementContent.style.zIndex = 0;
-        elementGraph.style.zIndex = 100;
-
-        elementContent.style.opacity = '0';
-        elementGraph.style.opacity = '1';
       });
 
     });
