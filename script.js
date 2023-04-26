@@ -102,12 +102,18 @@ function updateContent() {
                          }
                     }
 
+                    var firstElement = myList.slice(0, 1);
+
                     if (!hasFutureTimestamp) {
                          listString = "Strømmen bliver ikke billig de næste mange timer";
                          msgForContentClock.innerHTML = listString;
                     } else {
-                         let listString = myList.join(', ');
-                         listString = "Tænd kl. " + listString;
+                         if (data[currentHour]['icon'] === 'off') {
+                              listString = "Tænd kl. " + firstElement;
+                         } else {
+                              listString = "Du kan også tænde kl. " + firstElement;
+                         }
+
                          msgForContentClock.innerHTML = listString;
                     }
 
