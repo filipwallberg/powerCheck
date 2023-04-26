@@ -4,113 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <title>xxx.dk - skal jeg tænde for strømmen?</title>
-  <style>
-    @import "https://fonts.googleapis.com/css2?family=Anuphan&display=swap";
 
-    body {
-      background-color: #ddd;
-      font-family: 'Anuphan', sans-serif;
-      font-size: 2.5rem;
-      margin: 0;
-      padding: 0;
-      transition: background-color 1s ease-in-out
-    }
-
-    .fade-in {
-      transition-property: opacity;
-      transition-duration: 2s;
-      opacity: 0;
-      display: none
-    }
-
-    #welcomeScreen {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #fff;
-      width: 100%
-    }
-
-    #content {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #fff;
-      width: 100%
-    }
-
-    #graph {
-      display: none;
-      transition: opacity 1s ease-in-out;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #fff;
-      width: 80%;
-      background-color: #fff;
-      padding: 20px
-    }
-
-    .icon {
-      font-size: 30rem;
-      margin-bottom: 1.5rem
-    }
-
-    #msg {
-      white-space: nowrap;
-      margin-bottom: 1.5rem
-    }
-
-    #clockMsg {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem
-    }
-
-    #buttons {
-      margin-top: .5em
-    }
-
-    a.button-X {
-      font-size: 1.8rem;
-      display: inline-block;
-      padding: .5em 3em;
-      border: .16em solid #FFF;
-      margin: 0 .3em .3em 0;
-      box-sizing: border-box;
-      text-decoration: none;
-      font-family: 'Anuphan', sans-serif;
-      color: #FFF;
-      text-align: center;
-      transition: all .15s
-    }
-
-    a.button-X:hover {
-      color: #303030;
-      border-color: #303030
-    }
-
-    a.button-X:active {
-      color: #303030;
-      border-color: #303030
-    }
-
-    @media all and (max-width:30em) {
-      a.button-X {
-        display: block;
-        margin: .4em auto
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
   <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="script.js"></script>
 
 </head>
 
@@ -120,9 +18,9 @@
     <div><i id="icon" class="icon fa-solid fa-compass fa-spin fa-spin-reverse"></i></div>
     <div id="msg">Vælg landsdel</div>
     <div id="clockMsg">(du kan altid vælge en anden)</div>
-    <div id="buttonsTop">
-      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+    <div class="region-buttons">
+      <a data-region="dataWest" class="region-west-button button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a data-region="dataEast" class="region-east-button button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 
@@ -130,156 +28,11 @@
     <div><i id="icon"></i></div>
     <div id="msg"></div>
     <div id="clockMsg"></div>
-    <div id="buttonsTop">
-      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+    <div class="region-buttons">
+      <a data-region="dataWest" class="region-west-button button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+      <a data-region="dataEast" class="region-east-button button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
-
-  <div id="graph">
-    <div><i id="icon"></i></div>
-    <div id="msg"></div>
-    <div id="buttonsTop">
-      <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-      <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-  </div>
-
-  <script>
-
-    function changeVisibility(elementsToShow, elementsToHide) {
-
-      for (let i = 0; i < elementsToHide.length; i++) {
-        $(elementsToHide[i]).fadeOut();
-        elementsToHide[i].style.zIndex = -1;
-        elementsToHide[i].style.display = 'none';
-      }
-
-      for (let i = 0; i < elementsToShow.length; i++) {
-        $(elementsToShow[i]).fadeIn();
-        elementsToShow[i].style.zIndex = 100;
-        elementsToShow[i].style.display = 'block';
-      }
-
-    }
-
-    const elementWelcomeScreen = document.getElementById('welcomeScreen');
-    const elementContent = document.getElementById('content');
-    const elementGraph = document.getElementById('graph');
-
-    const regionWestButton = document.getElementById('welcomeScreen').querySelector('#region-west');
-    const regionWestButtonFront = document.getElementById('content').querySelector('#region-west');
-
-    const regionEastButton = document.getElementById('welcomeScreen').querySelector('#region-east');
-    const regionEastButtonFront = document.getElementById('content').querySelector('#region-east');
-
-    const iconForContent = document.getElementById('content').querySelector('#icon');
-    const msgForContent = document.getElementById('content').querySelector('#msg');
-
-    const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
-
-    function updateContent() {
-
-      var powerRegion = localStorage.getItem('powerRegionV2');
-
-      var now = new Date();
-      var currentHour = now.getHours();
-
-      if (powerRegion == null) {
-
-        changeVisibility([], [elementWelcomeScreen, elementGraph, elementContent]);
-        changeVisibility([elementWelcomeScreen], [elementWelcomeScreen, elementGraph, elementContent]);
-
-      } else {
-
-        changeVisibility([elementContent], [elementGraph, elementWelcomeScreen]);
-
-        fetch(powerRegion)
-          .then(response => response.json())
-          .then(data => {
-            document.body.style.transition = 'background-color 1s';
-            document.body.style.backgroundColor = data[currentHour]['background-color'];
-            if (data[currentHour]['icon'] === 'on') {
-              iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
-            } else {
-              iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
-            }
-            msgForContent.innerHTML = data[currentHour]['msg'];
-
-            timestamps = data["timeToUse"]
-
-            let hasFutureTimestamp = false;
-            var myList = [];
-
-            for (var timestamp of timestamps) {
-              console.log(timestamp);
-              var date = new Date(timestamp);
-              var now = new Date();
-              var diffInMs = date - now;
-              var diffInHours = diffInMs / (1000 * 60 * 60);
-
-              if (diffInHours > -1 && diffInHours <= 15) {
-                var hours = date.getHours().toString().padStart(2, "0");
-                var minutes = date.getMinutes().toString().padStart(2, "0");
-                var time = `${hours}:${minutes}`;
-                myList.push(time);
-                hasFutureTimestamp = true;
-              }
-            }
-
-            if (!hasFutureTimestamp) {
-              listString = "Det bliver ikke billigt lige med det samme";
-              msgForContentClock.innerHTML = listString;
-            } else {
-              let listString = myList.join(', ');
-              listString = "Tænd kl. " + listString;
-              msgForContentClock.innerHTML = listString;
-            }
-
-
-          })
-          .catch(error => {
-            document.body.style.transition = 'background-color 1s';
-            document.body.style.backgroundColor = "#ddd";
-            iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-spin-pulse';
-            msgForContent.innerHTML = "Fejl. Prøv igen senere.";
-          });
-
-        changeVisibility([elementContent], [elementGraph, elementWelcomeScreen]);
-
-      }
-
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-
-      updateContent();
-      setInterval(updateContent, 300000);
-
-      regionWestButtonFront.addEventListener("click", function () {
-        localStorage.setItem('powerRegionV2', "dataWest.json");
-        updateContent();
-      });
-
-      regionWestButton.addEventListener("click", function () {
-        localStorage.setItem('powerRegionV2', "dataWest.json");
-        updateContent();
-      });
-
-      regionEastButtonFront.addEventListener("click", function () {
-        localStorage.setItem('powerRegionV2', "dataEast.json");
-        updateContent();
-      });
-
-      regionEastButton.addEventListener("click", function () {
-        localStorage.setItem('powerRegionV2', "dataEast.json");
-        updateContent();
-      });
-
-    });
-
-
-  </script>
 
 </body>
 
