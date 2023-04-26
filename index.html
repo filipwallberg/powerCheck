@@ -69,6 +69,11 @@
       margin-bottom: 1.5rem
     }
 
+    #clockMsg {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem
+    }
+
     #buttons {
       margin-top: .5em
     }
@@ -114,6 +119,7 @@
   <div id="welcomeScreen">
     <div><i id="icon" class="icon fa-solid fa-compass fa-spin fa-spin-reverse"></i></div>
     <div id="msg">Vælg landsdel</div>
+    <div id="clockMsg">(du kan altid vælge en anden)</div>
     <div id="buttonsTop">
       <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
       <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
@@ -123,6 +129,7 @@
   <div id="content">
     <div><i id="icon"></i></div>
     <div id="msg"></div>
+    <div id="clockMsg"></div>
     <div id="buttonsTop">
       <a id="region-west" class="button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
       <a id="region-east" class="button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
@@ -169,6 +176,8 @@
     const iconForContent = document.getElementById('content').querySelector('#icon');
     const msgForContent = document.getElementById('content').querySelector('#msg');
 
+    const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
+
     function updateContent() {
 
       var powerRegion = localStorage.getItem('powerRegionV2');
@@ -183,7 +192,7 @@
 
       } else {
 
-        changeVisibility([], [elementContent, elementGraph, elementWelcomeScreen]);
+        changeVisibility([elementContent], [elementGraph, elementWelcomeScreen]);
 
         fetch(powerRegion)
           .then(response => response.json())
@@ -196,6 +205,38 @@
               iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
             }
             msgForContent.innerHTML = data[currentHour]['msg'];
+
+            timestamps = data["timeToUse"]
+
+            let hasFutureTimestamp = false;
+            var myList = [];
+
+            for (var timestamp of timestamps) {
+              console.log(timestamp);
+              var date = new Date(timestamp);
+              var now = new Date();
+              var diffInMs = date - now;
+              var diffInHours = diffInMs / (1000 * 60 * 60);
+
+              if (diffInHours > -1 && diffInHours <= 15) {
+                var hours = date.getHours().toString().padStart(2, "0");
+                var minutes = date.getMinutes().toString().padStart(2, "0");
+                var time = `${hours}:${minutes}`;
+                myList.push(time);
+                hasFutureTimestamp = true;
+              }
+            }
+
+            if (!hasFutureTimestamp) {
+              listString = "Det bliver ikke billigt lige med det samme";
+              msgForContentClock.innerHTML = listString;
+            } else {
+              let listString = myList.join(', ');
+              listString = "Tænd kl. " + listString;
+              msgForContentClock.innerHTML = listString;
+            }
+
+
           })
           .catch(error => {
             document.body.style.transition = 'background-color 1s';
