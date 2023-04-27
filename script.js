@@ -93,7 +93,7 @@ function updateContent() {
                          var diffInMs = date - now;
                          var diffInHours = diffInMs / (1000 * 60 * 60);
 
-                         if (diffInHours > -1 && diffInHours <= 15) {
+                         if (diffInHours > 1 && diffInHours <= 15) {
                               var hours = date.getHours().toString().padStart(2, "0");
                               var minutes = date.getMinutes().toString().padStart(2, "0");
                               var time = `${hours}:${minutes}`;
@@ -105,7 +105,12 @@ function updateContent() {
                     var firstElement = myList.slice(0, 1);
 
                     if (!hasFutureTimestamp) {
-                         listString = "Strømmen bliver ikke billig de næste mange timer";
+                         if (data[currentHour]['icon'] === 'off') {
+                              msgForContent.innerHTML = "Strømmen er dyr...";
+                              listString = "...og bliver ikke billig de næste mange timer.";
+                         } else {
+                              listString = "Strømmen bliver ikke billig de næste mange timer.";
+                         }
                          msgForContentClock.innerHTML = listString;
                     } else {
                          if (data[currentHour]['icon'] === 'off') {
