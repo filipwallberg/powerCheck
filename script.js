@@ -1,13 +1,19 @@
 function changeVisibility(elementsToShow, elementsToHide) {
 
      for (let i = 0; i < elementsToHide.length; i++) {
-          $(elementsToHide[i]).fadeOut("fast");
+          $(elementsToShow[i]).fadeOut("800", function () {
+               setTimeout(function () {
+               }, 1000);
+          });
           elementsToHide[i].style.zIndex = -1;
           elementsToHide[i].style.display = 'none';
      }
 
      for (let i = 0; i < elementsToShow.length; i++) {
-          $(elementsToShow[i]).fadeIn("slow");
+          $(elementsToShow[i]).fadeIn("800", function () {
+               setTimeout(function () {
+               }, 1000);
+          });
           elementsToShow[i].style.zIndex = 100;
           elementsToShow[i].style.display = 'block';
      }
@@ -15,9 +21,10 @@ function changeVisibility(elementsToShow, elementsToHide) {
 }
 
 function activateButtons() {
-     const regionButtons1 = document.querySelector('.region-buttons-1');
 
-     regionButtons1.addEventListener('click', (event) => {
+     const regionButtons = document.querySelector('.region-buttons');
+
+     regionButtons.addEventListener('click', (event) => {
           if (event.target.dataset.region === undefined) {
                var region = "dataEast";
 
@@ -30,30 +37,13 @@ function activateButtons() {
           updateContent(localStorage.getItem('powerRegionV2'));
      });
 
-     const regionButtons2 = document.querySelector('.region-buttons-2');
-
-     regionButtons2.addEventListener('click', (event) => {
-          if (event.target.dataset.region === undefined) {
-               var region = "dataEast";
-
-          } else {
-               var region = event.target.dataset.region;
-          }
-          const localStorageKey = 'powerRegionV2';
-          localStorage.setItem(localStorageKey, region + '.json');
-          updateContent(localStorage.getItem('powerRegionV2'));
-
-     });
 }
 
 function updateContent() {
 
-     const elementWelcomeScreen = document.getElementById('welcomeScreen');
      const elementContent = document.getElementById('content');
-
      const iconForContent = document.getElementById('content').querySelector('#icon');
      const msgForContent = document.getElementById('content').querySelector('#msg');
-
      const msgForContentClock = document.getElementById('content').querySelector('#clockMsg');
 
      var powerRegion = localStorage.getItem('powerRegionV2');
@@ -63,31 +53,29 @@ function updateContent() {
 
      if (powerRegion == null) {
 
-          changeVisibility([], [elementWelcomeScreen, elementContent]);
-          changeVisibility([elementWelcomeScreen], [elementContent]);
+          changeVisibility([], [elementContent]);
+
+          document.body.style.transition = 'background-color 1s';
+          document.body.style.backgroundColor = "#ddd";
+          iconForContent.className = 'icon fa-solid fa-compass fa-spin fa-spin-reverse';
+          msgForContent.innerHTML = "Vælg landsdel";
+          msgForContentClock.innerHTML = "Jylland + Fyn = vest | Sjælland = øst";
+
+          changeVisibility([elementContent], []);
 
      } else {
 
-          changeVisibility([elementContent], [elementWelcomeScreen]);
+          changeVisibility([], [elementContent]);
 
           fetch(powerRegion)
                .then(response => response.json())
                .then(data => {
-                    document.body.style.transition = 'background-color 1s';
-                    document.body.style.backgroundColor = data[currentHour]['background-color'];
-                    if (data[currentHour]['icon'] === 'on') {
-                         iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
-                    } else {
-                         iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
-                    }
-                    msgForContent.innerHTML = data[currentHour]['msg'];
-
-                    timestamps = data["timeToUse"]
 
                     let hasFutureTimestamp = false;
-                    var myList = [];
+                    var timeToUseList = [];
 
-                    for (var timestamp of timestamps) {
+                    for (var timestamp of data["timeToUse"]) {
+
                          var date = new Date(timestamp);
                          var now = new Date();
                          var diffInMs = date - now;
@@ -97,41 +85,62 @@ function updateContent() {
                               var hours = date.getHours().toString().padStart(2, "0");
                               var minutes = date.getMinutes().toString().padStart(2, "0");
                               var time = `${hours}:${minutes}`;
-                              myList.push(time);
+                              timeToUseList.push(time);
                               hasFutureTimestamp = true;
                          }
-                    }
 
-                    var firstElement = myList.slice(0, 1);
+                    }
 
                     if (!hasFutureTimestamp) {
+
                          if (data[currentHour]['icon'] === 'off') {
                               msgForContent.innerHTML = "Strømmen er dyr...";
-                              listString = "...og bliver ikke billig de næste mange timer.";
+                              msgForTimeToUse = "...og bliver ikke billig de næste mange timer.";
                          } else {
-                              listString = "Strømmen bliver ikke billig de næste mange timer.";
-                         }
-                         msgForContentClock.innerHTML = listString;
-                    } else {
-                         if (data[currentHour]['icon'] === 'off') {
-                              listString = "Tænd kl. " + firstElement;
-                         } else {
-                              listString = "Du kan også tænde kl. " + firstElement;
+                              msgForTimeToUse = "Strømmen bliver ikke billig de næste mange timer.";
                          }
 
-                         msgForContentClock.innerHTML = listString;
+                         msgForContentClock.innerHTML = msgForTimeToUse;
+
+                    } else {
+
+                         if (data[currentHour]['icon'] === 'off') {
+                              msgForTimeToUse = "Du kan tænde kl. " + timeToUseList.slice(0, 1) + ".";
+                         } else {
+                              msgForTimeToUse = "Du kan også tænde kl. " + timeToUseList.slice(0, 1) + ".";
+                         }
+
+                         msgForContentClock.innerHTML = msgForTimeToUse;
+
                     }
+
+                    document.body.style.transition = 'background-color 1s';
+                    document.body.style.backgroundColor = data[currentHour]['background-color'];
+
+                    if (data[currentHour]['icon'] === 'on') {
+
+                         iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-bounce';
+
+                    } else {
+
+                         iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-shake';
+
+                    }
+
+                    msgForContent.innerHTML = data[currentHour]['msg'];
 
 
                })
                .catch(error => {
+
                     document.body.style.transition = 'background-color 1s';
                     document.body.style.backgroundColor = "#ddd";
                     iconForContent.className = 'icon fa-sharp fa-solid fa-power-off fa-spin-pulse';
                     msgForContent.innerHTML = "Fejl. Prøv igen senere.";
+
                });
 
-          changeVisibility([elementContent], [elementWelcomeScreen]);
+          changeVisibility([elementContent], []);
 
      }
 
