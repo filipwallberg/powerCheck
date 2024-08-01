@@ -1,45 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <title>tænd.dk - skal jeg tænde for strømmen?</title>
+  <head>
+    <meta charset="UTF-8">
+    <title>tænd.dk - skal jeg tænde for strømmen?</title>
 
-  <link rel="canonical" href="https://tænd.dk" />
+    <link rel="canonical" href="https://tænd.dk" />
 
-  <link rel="preconnect" href="https://kit.fontawesome.com/" />
-  <link rel="preconnect" href="https://ajax.googleapis.com/" />
-  <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://kit.fontawesome.com/" />
+    <link rel="preconnect" href="https://ajax.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
 
-  <meta name="google" value="notranslate">
+    <meta name="google" value="notranslate">
 
-  <meta property="og:title" content="tænd.dk" />
-  <meta property="og:description" content="Skal jeg tænde for strømmen?" />
-  <meta property="og:image" content="logo.png" />
-  <meta property="og:url" content="https://tænd.dk" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="da_DK" />
+    <meta property="og:title" content="tænd.dk" />
+    <meta property="og:description" content="Skal jeg tænde for strømmen?" />
+    <meta property="og:image" content="logo.png" />
+    <meta property="og:url" content="https://tænd.dk" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="da_DK" />
 
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-  <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/3a9e85b53f.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="script.js"></script>
 
-</head>
+  </head>
 
-<body>
+  <body>
 
-  <div id="content">
-    <div><i id="icon"></i></div>
-    <div id="msg"></div>
-    <div id="clockMsg"></div>
-    <div class="region-buttons">
-      <a data-region="dataWest" class="region-west-button button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
-      <a data-region="dataEast" class="region-east-button button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+    <div id="content">
+      <div><i id="icon"></i></div>
+      <div id="msg"></div>
+      <div id="clockMsg"></div>
+      <div class="region-buttons">
+        <a data-region="dataWest" class="region-west-button button-X"><i class="fa-solid fa-arrow-left"></i>&nbsp;Vest</a>
+        <a data-region="dataEast" class="region-east-button button-X">Øst&nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+      </div>
     </div>
-  </div>
 
-</body>
+    <script type="text/javascript">
+      (function (window, document, dataLayerName, id) {
+        window[dataLayerName] = window[dataLayerName] || [], window[dataLayerName].push({ start: (new Date).getTime(), event: "stg.start" }); var scripts = document.getElementsByTagName('script')[0], tags = document.createElement('script');
+        function stgCreateCookie(a, b, c) { var d = ""; if (c) { var e = new Date; e.setTime(e.getTime() + 24 * c * 60 * 60 * 1e3), d = "; expires=" + e.toUTCString(); f = "; SameSite=Strict" } document.cookie = a + "=" + b + d + f + "; path=/" }
+        var isStgDebug = (window.location.href.match("stg_debug") || document.cookie.match("stg_debug")) && !window.location.href.match("stg_disable_debug"); stgCreateCookie("stg_debug", isStgDebug ? 1 : "", isStgDebug ? 14 : -1);
+        var qP = []; dataLayerName !== "dataLayer" && qP.push("data_layer_name=" + dataLayerName), isStgDebug && qP.push("stg_debug"); var qPString = qP.length > 0 ? ("?" + qP.join("&")) : "";
+        tags.async = !0, tags.src = "https://taend.containers.piwik.pro/" + id + ".js" + qPString, scripts.parentNode.insertBefore(tags, scripts);
+        !function (a, n, i) { a[n] = a[n] || {}; for (var c = 0; c < i.length; c++)!function (i) { a[n][i] = a[n][i] || {}, a[n][i].api = a[n][i].api || function () { var a = [].slice.call(arguments, 0); "string" == typeof a[0] && window[dataLayerName].push({ event: n + "." + i + ":" + a[0], parameters: [].slice.call(arguments, 1) }) } }(i[c]) }(window, "ppms", ["tm", "cm"]);
+      })(window, document, 'dataLayer', '5259a39e-2726-4da8-aaa9-f945414487fa');
+    </script>
+
+  </body>
 
 </html>
